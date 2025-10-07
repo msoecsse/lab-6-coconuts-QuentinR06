@@ -5,3 +5,4 @@ public interface ObserverSubject {
     void detacth(IslandObject obj);
     void notifyAllObjects();
 }
+
