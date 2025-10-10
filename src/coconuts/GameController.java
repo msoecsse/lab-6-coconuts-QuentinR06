@@ -54,6 +54,9 @@ public class GameController {
                 coconutTimeline.pause();
                 started = false;
             }
+        } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done()){
+            LaserBeam laser = new LaserBeam(theGame, 400, theGame.getCrab().getX());
+            theBeach.getChildren().add(laser.getImageView());
         }
     }
 }

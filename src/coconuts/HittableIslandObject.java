@@ -12,4 +12,7 @@ public abstract class HittableIslandObject extends IslandObject {
     public boolean isHittable() {
         return true;
     }
+    public int getX(){
+        return super.getX();
+    }
 }

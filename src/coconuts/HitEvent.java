@@ -27,7 +27,7 @@ public class HitEvent implements ObserverSubject{
     @Override
     public void notifyAllObjects() {
         for (IslandObject o : objects){
-            o.update();
+            //o.update();
         }
     }
 }

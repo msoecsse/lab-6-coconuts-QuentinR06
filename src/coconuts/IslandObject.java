@@ -37,6 +37,10 @@ public abstract class IslandObject {
         }
     }
 
+    public int getX(){
+        return this.x;
+    }
+
     public boolean isHittable() {
         return false;
     }

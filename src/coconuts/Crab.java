@@ -23,4 +23,8 @@ public class Crab extends HittableIslandObject {
         x += offset;
         display();
     }
+
+    public int getX(){
+        return super.getX();
+    }
 }
