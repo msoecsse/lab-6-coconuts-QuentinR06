@@ -17,6 +17,7 @@ public class GameController {
     private static final double MILLISECONDS_PER_STEP = 1000.0 / 30;
     private Timeline coconutTimeline;
     private boolean started = false;
+    private final int laserCooldown = 500;
 
     @FXML
     private Pane gamePane;
@@ -40,6 +41,7 @@ public class GameController {
         coconutTimeline.setCycleCount(Timeline.INDEFINITE);
     }
 
+    private long lastFire = 0;
     @FXML
     public void onKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.RIGHT && !theGame.done()) {
@@ -55,8 +57,13 @@ public class GameController {
                 started = false;
             }
         } else if (keyEvent.getCode() == KeyCode.UP && !theGame.done()){
-            LaserBeam laser = new LaserBeam(theGame, 400, theGame.getCrab().getX());
-            theBeach.getChildren().add(laser.getImageView());
+            if(System.currentTimeMillis() - lastFire >= laserCooldown) {
+                LaserBeam laser = new LaserBeam(theGame, -50, (int) (theGame.getCrab().getX() +
+                        theGame.getCrab().getImageView().getFitWidth() / 2));
+                lastFire = System.currentTimeMillis();
+                theGame.registerObject(laser);
+                theBeach.getChildren().add(laser.getImageView());
+            }
         }
     }
 }

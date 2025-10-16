@@ -37,7 +37,7 @@ public class OhCoconutsGameManager {
             System.out.println("Unexpected image view for beach");
     }
 
-    private void registerObject(IslandObject object) {
+    public void registerObject(IslandObject object) {
         allObjects.add(object);
         if (object.isHittable()) {
             HittableIslandObject asHittable = (HittableIslandObject) object;

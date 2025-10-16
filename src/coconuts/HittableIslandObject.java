@@ -15,4 +15,7 @@ public abstract class HittableIslandObject extends IslandObject {
     public int getX(){
         return super.getX();
     }
+    public int getY(){
+        return super.getY();
+    }
 }
