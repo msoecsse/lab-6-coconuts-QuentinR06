@@ -70,4 +70,10 @@ public abstract class IslandObject {
     }
 
     public abstract void step();
+
+    public int getWidth() {
+        return width;
+    }
+
+
 }

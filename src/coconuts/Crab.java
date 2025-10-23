@@ -27,4 +27,10 @@ public class Crab extends HittableIslandObject {
     public int getX(){
         return super.getX();
     }
+
+    @Override
+    public boolean isGroundObject() {
+        return true;
+    }
+
 }

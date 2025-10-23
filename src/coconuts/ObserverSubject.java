@@ -1,8 +1,8 @@
 package coconuts;
 
 public interface ObserverSubject {
-    void attach(IslandObject obj);
-    void detacth(IslandObject obj);
-    void notifyAllObjects();
+    void attach(Observers o);
+    void detach(Observers o);
+    void notifyAllObservers();
 }
 

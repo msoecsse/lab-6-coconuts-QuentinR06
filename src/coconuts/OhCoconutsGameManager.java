@@ -2,6 +2,7 @@ package coconuts;
 
 // https://stackoverflow.com/questions/42443148/how-to-correctly-separate-view-from-model-in-javafx
 
+import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 
 import java.util.Collection;
@@ -16,16 +17,32 @@ public class OhCoconutsGameManager {
     private final int DROP_INTERVAL = 10;
     private final int MAX_TIME = 100;
     private Pane gamePane;
+    private Pane beachPane;
     private Crab theCrab;
     private Beach theBeach;
     /* game play */
     private int coconutsInFlight = 0;
     private int gameTick = 0;
 
-    public OhCoconutsGameManager(int height, int width, Pane gamePane) {
+    //observers
+    private ScoreBoard scoreBoard;
+    private ObjectRemover objectRemover;
+    private GameTerminator gameTerminator;
+
+    public ScoreBoard getScoreBoard() {
+        return scoreBoard;
+    }
+
+    public OhCoconutsGameManager(int height, int width, Pane gamePane, Pane beachPane) {
         this.height = height;
         this.width = width;
         this.gamePane = gamePane;
+        this.beachPane = beachPane;
+
+        //create the observers
+        scoreBoard = new ScoreBoard();
+        objectRemover = new ObjectRemover(this, gamePane, beachPane);
+        gameTerminator = new GameTerminator(this);
 
         this.theCrab = new Crab(this, height, width);
         registerObject(theCrab);
@@ -87,9 +104,18 @@ public class OhCoconutsGameManager {
         for (IslandObject thisObj : allObjects) {
             for (HittableIslandObject hittableObject : hittableIslandSubjects) {
                 if (thisObj.canHit(hittableObject) && thisObj.isTouching(hittableObject)) {
-                    // TODO: add code here to process the hit
-                    scheduledForRemoval.add(hittableObject);
-                    gamePane.getChildren().remove(hittableObject.getImageView());
+                    // Create a HitEvent subject
+                    HitEvent hitEvent = new HitEvent(thisObj, hittableObject);
+
+                    // Attach observers to this event
+                    hitEvent.attach(scoreBoard);
+                    hitEvent.attach(objectRemover);
+                    hitEvent.attach(gameTerminator);
+
+                    // Notify all observers
+                    hitEvent.notifyAllObservers();
+                    //scheduledForRemoval.add(hittableObject);
+                    //gamePane.getChildren().remove(hittableObject.getImageView());
                 }
             }
         }
@@ -101,6 +127,7 @@ public class OhCoconutsGameManager {
             }
         }
         scheduledForRemoval.clear();
+
     }
 
     public void scheduleForDeletion(IslandObject islandObject) {

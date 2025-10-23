@@ -16,4 +16,32 @@ public class Coconut extends HittableIslandObject {
     public void step() {
         y += 5;
     }
+
+    @Override
+    public boolean isFalling() {
+        return true;
+    }
+
+    @Override
+    public boolean canHit(IslandObject other) {
+        return other.isGroundObject() || other.isHittable();
+    }
+
+    @Override
+    public boolean isTouching(IslandObject other) {
+        // Coconut position
+        int coconutBottom = (y + width) - 70;
+        int coconutCenterX = x + width / 2;
+
+        // Other object position
+        int otherTop = other.getY();
+        int otherLeft = other.getX();
+        int otherRight = other.getX() + other.getWidth();
+
+        boolean verticalTouch = Math.abs(coconutBottom - otherTop) <= 10;
+
+        boolean horizontalTouch = coconutCenterX >= otherLeft && coconutCenterX <= otherRight;
+
+        return verticalTouch && horizontalTouch;
+    }
 }

@@ -1,6 +1,8 @@
 package coconuts;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -24,17 +26,22 @@ public class GameController {
     @FXML
     private Pane theBeach;
     private OhCoconutsGameManager theGame;
+    @FXML
+    private Label beached;
+    @FXML
+    private Label destroyed;
 
     @FXML
     public void initialize() {
         theGame = new OhCoconutsGameManager((int) (gamePane.getPrefHeight() - theBeach.getPrefHeight()),
-                (int) (gamePane.getPrefWidth()), gamePane);
+                (int) (gamePane.getPrefWidth()), gamePane, theBeach);
 
         gamePane.setFocusTraversable(true);
 
         coconutTimeline = new Timeline(new KeyFrame(Duration.millis(MILLISECONDS_PER_STEP), (e) -> {
             theGame.tryDropCoconut();
             theGame.advanceOneTick();
+            updateScoreDisplay();
             if (theGame.done())
                 coconutTimeline.pause();
         }));
@@ -65,5 +72,12 @@ public class GameController {
                 theBeach.getChildren().add(laser.getImageView());
             }
         }
+    }
+
+    private void updateScoreDisplay() {
+        Platform.runLater(() -> {
+            beached.setText("Beached: " + theGame.getScoreBoard().getCoconutsReachedBeach());
+            destroyed.setText("Destroyed: " + theGame.getScoreBoard().getCoconutsDestroyed());
+        });
     }
 }

@@ -1,5 +1,5 @@
 package coconuts;
 
 public interface Observers {
-    void update();
+    void update(ObserverSubject subject);
 }
